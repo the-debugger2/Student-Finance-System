@@ -31,28 +31,33 @@
     </header>
     <main class="container">
         <div class="first">
-            <div class="balance"><i class='bx bx-dollar-circle'></i><p>BALANCE ZMW</p><span>124134</span></div>
+            <div class="balance"><i class='bx bx-dollar-circle'></i>
+                <p>BALANCE ZMW</p><span>124134</span></div>
             <div class="School">
-                <i class='bx bxs-school'></i><p> School Fees</p>
+                <i class='bx bxs-school'></i>
+                <p> School Fees</p>
                 <p class="School-balance">ZMW <span>0</span></p>
             </div>
             <div class="Food-and-drink">
-                <i class='bx bx-restaurant'></i><i class='bx bxs-drink'></i><p>Food & Drink</p>
+                <i class='bx bx-restaurant'></i><i class='bx bxs-drink'></i>
+                <p>Food & Drink</p>
                 <p class="FD-balance"> ZMW <span>63847</span></p>
             </div>
             <div class="Bills-and-utilities">
-                <i class='bx bx-money-withdraw'></i><p>Bill & Utilities</p>
+                <i class='bx bx-money-withdraw'></i>
+                <p>Bill & Utilities</p>
                 <p class="BU-balance"> ZMW <span>63847</span></p>
             </div>
             <div class="">
-                <i class='bx bx-question-mark'></i><p> Other</p>
+                <i class='bx bx-question-mark'></i>
+                <p> Other</p>
                 <p class="other">ZMW <span>63847</span></p>
             </div>
         </div>
         <div class="second">
             <div class="transaction-remainder">
                 <div class="transaction scroll">
-                    <div >
+                    <div>
                         <!-- <span>category</span>
                             <span>amount</span>
                             <span>date</span> -->
@@ -65,6 +70,7 @@
                         <div>
                             <div>
                                 <span>This will follow you everywhere🤡💀☠ </span>
+                                <label for="checkbox">Done</label>
                                 <input type="checkbox" name="" id="checkbox">
                             </div>
                             <br>
@@ -108,9 +114,9 @@
         <button class="btn-Cancel-form">&times;</button>
         <form class="add-money-form">
             <h2>Add Money</h2>
-            <label for="sum">Amount</label>
+            <label for="Add-amount">Amount</label>
             <input type="number" name="" id="Add-amount" min="0" required>
-            <button class="btn-add">Add Money</button>
+            <button type="submit" class="btn-add">Add Money</button>
         </form>
     </div>
 
@@ -118,9 +124,9 @@
         <button class="btn-Cancel-reminder">&times;</button>
         <form class="set-reminder-form">
             <h2>Set Reminder</h2>
-            <label>Set reminder:</label>
+            <label for="task">Set reminder:</label>
             <textarea rows="3" id="task"></textarea>
-            <label for="">Reminder Date:</label>
+            <label for="date">Reminder Date:</label>
             <input type="date" id="date">
             <button class="btn-add-task">Add Task</button>
         </form>

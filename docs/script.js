@@ -39,13 +39,16 @@ const foodAndDrink = loadFoodAndDrink();
 const billsAndUtilities = loadBills();
 const other = loadOther();
 const names = currentUserEmail.split('@');
+
 function displayUser() {
     userName.textContent = `Welcome ${names[0]}`;
 }
+
 function loadReminders() {
     const retrievedReminders = localStorage.getItem(`reminder_${currentUserEmail}`);
     return retrievedReminders ? JSON.parse(retrievedReminders) : [];
 }
+
 function loadTransactions() {
     const loadedValue = localStorage.getItem(`transaction_${currentUserEmail}`);
     return loadedValue ? JSON.parse(loadedValue).map((trans) => ({
@@ -53,73 +56,78 @@ function loadTransactions() {
         date: new Date(trans.date)
     })) : [];
 }
+
 function loadBalance() {
     const retrievedBalance = localStorage.getItem(`balance_${currentUserEmail}`);
     return retrievedBalance ? JSON.parse(retrievedBalance) : [];
 }
+
 function loadBills() {
     const loadValue = localStorage.getItem(`bills_${currentUserEmail}`);
     return loadValue ? JSON.parse(loadValue) : [];
 }
+
 function loadSchoolFees() {
     const loadValue = localStorage.getItem(`school_${currentUserEmail}`);
     return loadValue ? JSON.parse(loadValue) : [];
 }
+
 function loadOther() {
     const loadValue = localStorage.getItem(`other_${currentUserEmail}`);
     return loadValue ? JSON.parse(loadValue) : [];
 }
+
 function loadFoodAndDrink() {
     const loadValue = localStorage.getItem(`food_${currentUserEmail}`);
     return loadValue ? JSON.parse(loadValue) : [];
 }
-const totalSchoolFeesBalance = schoolFees.reduce(function (acc, curr) {
+const totalSchoolFeesBalance = schoolFees.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalFoodAndDrinkBalance = foodAndDrink.reduce(function (acc, curr) {
+const totalFoodAndDrinkBalance = foodAndDrink.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalOtherBalance = other.reduce(function (acc, curr) {
+const totalOtherBalance = other.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalBills = billsAndUtilities.reduce(function (acc, curr) {
+const totalBills = billsAndUtilities.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalBalance = balance.reduce(function (acc, curr) {
+const totalBalance = balance.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-btnReminder.addEventListener('click', function (e) {
+btnReminder.addEventListener('click', function(e) {
     e.preventDefault();
     reminderContainer.style.display = 'block';
     body.classList.add('blurred');
 });
-btnCancelReminder.addEventListener('click', function (e) {
+btnCancelReminder.addEventListener('click', function(e) {
     e.preventDefault();
     reminderContainer.style.display = 'none';
     body.classList.remove('blurred');
 });
-btnPayment.addEventListener('click', function (e) {
+btnPayment.addEventListener('click', function(e) {
     e.preventDefault();
     paymentContainer.style.display = 'block';
     body.classList.add('blurred');
 });
-btnCancel.addEventListener('click', function (e) {
+btnCancel.addEventListener('click', function(e) {
     e.preventDefault();
     paymentContainer.style.display = 'none';
     body.classList.remove('blurred');
 });
-btnCancelForm.addEventListener('click', function (e) {
+btnCancelForm.addEventListener('click', function(e) {
     e.preventDefault();
     console.log(e.target);
     addMoneyContainer.style.display = 'none';
     body.classList.remove('blurred');
 });
-btnIncome.addEventListener('click', function (e) {
+btnIncome.addEventListener('click', function(e) {
     e.preventDefault();
     addMoneyContainer.style.display = 'block';
     body.classList.add('blurred');
 });
-btnPay.addEventListener('click', function (e) {
+btnPay.addEventListener('click', function(e) {
     e.preventDefault();
     const transactionItem = {
         category: categoryInput.value,
@@ -142,23 +150,26 @@ btnPay.addEventListener('click', function (e) {
     updateBillsBalance();
     updateOtherBalance();
     updateFoodAndDrinkBalance();
-    // renderChart();
+    // Update chart dynamically with new data
+    renderChart();
     updateLocalStorage();
     paymentContainer.style.display = 'none';
     body.classList.remove('blurred');
     paymentForm.reset();
 });
-btnAddMoney.addEventListener('click', function (e) {
+btnAddMoney.addEventListener('click', function(e) {
     e.preventDefault();
     const newAmount = Number(addAmountInput.value);
     balance.push(newAmount);
     updateLocalStorage();
     updateBalance();
+    // Update chart dynamically when income is added
+    renderChart();
     addMoneyContainer.style.display = 'none';
     body.classList.remove('blurred');
     addMoneyForm.reset();
 });
-btnAddTask.addEventListener('click', function (e) {
+btnAddTask.addEventListener('click', function(e) {
     e.preventDefault();
     const reminderItem = {
         description: taskDescriptionInput.value,
@@ -172,6 +183,7 @@ btnAddTask.addEventListener('click', function (e) {
     body.classList.remove('blurred');
     setReminderForm.reset();
 });
+
 function displayReminderTask(reminder) {
     const html = `
                      <div>
@@ -192,6 +204,7 @@ function displayReminderTask(reminder) {
                     `;
     reminderHistory.insertAdjacentHTML('afterbegin', html);
 }
+
 function renderTransaction(trans) {
     const html = `
                      <div class="transaction-item">
@@ -201,31 +214,38 @@ function renderTransaction(trans) {
                     </div>
                     <hr> 
                 `;
-    trasactionHistory.insertAdjacentHTML('afterend', html);
+    trasactionHistory.insertAdjacentHTML('afterbegin', html);
 }
+
 function updateBalance() {
     const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
     balanceText.textContent = `${totalBalance}`;
 }
+
 function updateSchoolFeesBalance() {
     const totalSchoolFeesBalance = schoolFees.reduce((acc, curr) => acc + curr, 0);
     schoolBalance.textContent = `${totalSchoolFeesBalance}`;
 }
+
 function updateBillsBalance() {
     const totalBills = billsAndUtilities.reduce((acc, curr) => acc + curr, 0);
     billsBalance.textContent = `${totalBills}`;
 }
+
 function updateOtherBalance() {
     const totalOtherBalance = other.reduce((acc, curr) => acc + curr, 0);
     otherBalance.textContent = `${totalOtherBalance}`;
 }
+
 function updateFoodAndDrinkBalance() {
     const totalFoodAndDrinkBalance = foodAndDrink.reduce((acc, curr) => acc + curr, 0);
     foodAndDrinkBalance.textContent = `${totalFoodAndDrinkBalance}`;
 }
+
 function updateLocalStorage() {
     localStorage.setItem(`balance_${currentUserEmail}`, JSON.stringify(balance));
 }
+
 function categoryUpdate(catAmount) {
     const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
     if (catAmount.category === 'School') {
@@ -234,68 +254,67 @@ function categoryUpdate(catAmount) {
             balance.push((-1) * (catAmount.amount));
             updateSchoolStorage();
             updateSchoolFeesBalance();
-        }
-        else {
+        } else {
             alert("Insufficient funds, please deposit to withdraw...");
         }
-    }
-    else if (catAmount.category === 'Food and Drink') {
+    } else if (catAmount.category === 'Food and Drink') {
         if (catAmount.amount <= totalBalance) {
             foodAndDrink.push(catAmount.amount);
             balance.push((-1) * (catAmount.amount));
             updateFoodAndDrinkStorage();
             updateFoodAndDrinkBalance();
-        }
-        else {
+        } else {
             alert("Insufficient funds, please deposit to withdraw");
         }
-    }
-    else if (catAmount.category === 'Bill and Utilities') {
+    } else if (catAmount.category === 'Bill and Utilities') {
         if (catAmount.amount <= totalBalance) {
             billsAndUtilities.push(catAmount.amount);
             balance.push((-1) * (catAmount.amount));
             updateBillAndUtilitiesStorage();
             updateBillsBalance();
-        }
-        else {
+        } else {
             alert("Insufficient funds, please deposit to withdraw");
         }
-    }
-    else if (catAmount.category === 'Other') {
+    } else if (catAmount.category === 'Other') {
         if (catAmount.amount <= totalBalance) {
             other.push(catAmount.amount);
             balance.push((-1) * (catAmount.amount));
             updateOtherStorage();
             updateOtherBalance();
-        }
-        else {
+        } else {
             alert("Insufficient funds, please deposit to withdraw");
         }
-    }
-    else {
+    } else {
         return;
     }
     updateLocalStorage();
     updateBalance();
 }
+
 function updateReminderStorage() {
     localStorage.setItem(`reminder_${currentUserEmail}`, JSON.stringify(reminderArray));
 }
+
 function updateTransactionStorage() {
     localStorage.setItem(`transaction_${currentUserEmail}`, JSON.stringify(transactions));
 }
+
 function updateSchoolStorage() {
     localStorage.setItem(`school_${currentUserEmail}`, JSON.stringify(schoolFees));
 }
+
 function updateBillAndUtilitiesStorage() {
     localStorage.setItem(`bills_${currentUserEmail}`, JSON.stringify(billsAndUtilities));
 }
+
 function updateFoodAndDrinkStorage() {
     localStorage.setItem(`food_${currentUserEmail}`, JSON.stringify(foodAndDrink));
 }
+
 function updateOtherStorage() {
     localStorage.setItem(`other_${currentUserEmail}`, JSON.stringify(other));
 }
+
 function toggleReminderComplete(description) {
     const reminder = reminderArray.find(rem => rem.description === description);
     if (reminder) {
@@ -304,6 +323,7 @@ function toggleReminderComplete(description) {
         renderReminders();
     }
 }
+
 function deleteReminder(description) {
     const index = reminderArray.findIndex(rem => rem.description === description);
     if (index > -1) {
@@ -312,36 +332,44 @@ function deleteReminder(description) {
         renderReminders();
     }
 }
-const totalIncome = balance.reduce(function (acc, curr) { return acc + curr; }, 0) - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
+const totalIncome = balance.reduce(function(acc, curr) { return acc + curr; }, 0) - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
+let chartInstance = null;
+
 function renderChart() {
     const ctx = document.getElementById('myChart').getContext('2d');
     const totalSchoolFeesBalance = schoolFees.reduce((acc, curr) => acc + curr, 0);
     const totalFoodAndDrinkBalance = foodAndDrink.reduce((acc, curr) => acc + curr, 0);
     const totalOtherBalance = other.reduce((acc, curr) => acc + curr, 0);
     const totalBills = billsAndUtilities.reduce((acc, curr) => acc + curr, 0);
-    new Chart(ctx, {
+    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
+    const totalIncome = totalBalance - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
+    // Destroy existing chart if it exists
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+    chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: ['School', 'Food and Drink', 'Bills and Utilities', 'Other', 'Income'],
             datasets: [{
-                    label: 'Transaction Amount',
-                    data: [totalSchoolFeesBalance, totalFoodAndDrinkBalance, totalBills, totalOtherBalance, totalIncome],
-                    backgroundColor: [
-                        'rgba(30, 144, 255)',
-                        'rgba(255, 99, 71)',
-                        'rgba(255, 209, 59)',
-                        'rgba(255, 105, 180)',
-                        'rgb(98, 255, 25)',
-                    ],
-                    borderColor: [
-                        'rgba(30, 144, 255)',
-                        'rgba(255, 99, 71)',
-                        'rgba(255, 209, 59)',
-                        'rgba(255, 105, 180)',
-                        'rgb(98, 255, 25)',
-                    ],
-                    borderWidth: 1,
-                }]
+                label: 'Transaction Amount',
+                data: [totalSchoolFeesBalance, totalFoodAndDrinkBalance, totalBills, totalOtherBalance, totalIncome],
+                backgroundColor: [
+                    'rgba(30, 144, 255)',
+                    'rgba(255, 99, 71)',
+                    'rgba(255, 209, 59)',
+                    'rgba(255, 105, 180)',
+                    'rgb(98, 255, 25)',
+                ],
+                borderColor: [
+                    'rgba(30, 144, 255)',
+                    'rgba(255, 99, 71)',
+                    'rgba(255, 209, 59)',
+                    'rgba(255, 105, 180)',
+                    'rgb(98, 255, 25)',
+                ],
+                borderWidth: 1,
+            }]
         },
         options: {
             responsive: true,
@@ -399,7 +427,7 @@ function renderChart() {
 //         }
 //     });
 // }
-window.addEventListener('DOMContentLoaded', function () {
+window.addEventListener('DOMContentLoaded', function() {
     reminderArray.forEach(displayReminderTask);
     transactions.forEach(renderTransaction);
     updateBalance();
@@ -410,6 +438,7 @@ window.addEventListener('DOMContentLoaded', function () {
     renderChart();
     displayUser();
 });
+
 function renderReminders() {
     reminderHistory.innerHTML = '';
     reminderArray.forEach(displayReminderTask);

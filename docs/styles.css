@@ -1,4 +1,3 @@
-
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -9,14 +8,28 @@ body {
 main.blurred {
     filter: blur(5px);
     pointer-events: none;
+    -webkit-user-select: none;
+    /* Chrome, Safari, newer Edge */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Old IE/Edge */
     user-select: none;
+    /* Standard */
 }
 
 .payment-container,
 .add-money-container,
 .reminder-container {
     pointer-events: auto;
+    -webkit-user-select: auto;
+    /* Chrome, Safari, newer Edge */
+    -moz-user-select: auto;
+    /* Firefox */
+    -ms-user-select: auto;
+    /* Old IE/Edge */
     user-select: auto;
+    /* Standard */
 }
 
 header {
@@ -29,11 +42,14 @@ header {
     margin-bottom: 10px;
 }
 
-.title{
+.title {
     color: #b8ff1e;
     font-style: italic;
 }
+
+
 /* Style the dropdown button */
+
 .dropbtn {
     background-color: #4CAF50;
     color: white;
@@ -43,13 +59,17 @@ header {
     cursor: pointer;
 }
 
+
 /* The container <div> - needed to position the dropdown content */
+
 .dropdown {
     position: relative;
     display: inline-block;
 }
 
+
 /* Dropdown Content (Hidden by Default) */
+
 .dropdown-content {
     display: none;
     position: absolute;
@@ -59,7 +79,9 @@ header {
     z-index: 1;
 }
 
+
 /* Links inside the dropdown */
+
 .dropdown-content a {
     color: black;
     padding: 12px 16px;
@@ -67,17 +89,23 @@ header {
     display: block;
 }
 
+
 /* Change color of dropdown links on hover */
+
 .dropdown-content a:hover {
     background-color: #ddd;
 }
 
+
 /* Show the dropdown menu on hover */
+
 .dropdown:hover .dropdown-content {
     display: block;
 }
 
+
 /* Change the background color of the dropdown button when the dropdown content is shown */
+
 .dropdown:hover .dropbtn {
     background-color: #3e8e41;
 }
@@ -87,7 +115,6 @@ header {
     background-color: inherit;
     font-size: inherit;
 }
-
 
 .user-menu span {
     margin-right: 15px;
@@ -108,7 +135,6 @@ header {
 .container>div:nth-child(2) {
     grid-column: span 2;
 }
-
 
 .first {
     display: flex;
@@ -154,6 +180,7 @@ header {
     height: 450px;
 }
 
+
 /* .progres-graph {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -189,7 +216,7 @@ header {
     border-radius: 5px;
 }
 
-.reminder button{
+.reminder button {
     background-color: #6c6c6d;
     border: none;
     height: 25px;
@@ -198,7 +225,7 @@ header {
     color: white;
 }
 
-.reminder button:hover{
+.reminder button:hover {
     background-color: rgb(253, 48, 48);
 }
 
@@ -212,10 +239,12 @@ header {
     padding: 10px;
 }
 
+
 /* .reminder .btns{
     display: flex;
     justify-content: space-between;
 } */
+
 
 /* /////////////////////////////////////////// */
 
@@ -391,7 +420,9 @@ i {
     color: #000407;
 }
 
+
 /* Category Colors */
+
 .School {
     border-left: 10px solid rgb(30, 144, 255);
 }
@@ -400,13 +431,14 @@ i {
     border-left: 10px solid rgb(255, 99, 71);
 }
 
-.Bill{
+.Bill {
     border-left: 10px solid rgb(255, 209, 59);
 }
 
 .Other {
     border-left: 10px solid rgb(255, 105, 180);
 }
+
 .transaction-item {
     display: flex;
     justify-content: space-between;
@@ -415,7 +447,384 @@ i {
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
-.fa{
+.fa {
     text-decoration: none;
     color: white;
+}
+
+
+/* ========================================== */
+
+
+/* MEDIA QUERIES FOR RESPONSIVE DESIGN */
+
+
+/* ========================================== */
+
+
+/* TABLETS - Large (iPad Pro: 1024px and up) */
+
+@media (max-width: 1024px) {
+    .container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    .first {
+        flex-direction: column;
+        gap: 15px;
+    }
+    .first>div {
+        width: 100%;
+    }
+    .second {
+        grid-template-columns: 1fr;
+    }
+    .transaction-remainder {
+        grid-template-columns: 1fr;
+    }
+    .transaction-remainder>div {
+        width: 98%;
+        height: auto;
+        min-height: 350px;
+    }
+    .progres-graph>div {
+        width: 98%;
+        height: auto;
+        min-height: 350px;
+    }
+    .payment-container,
+    .add-money-container,
+    .reminder-container {
+        width: 90%;
+        left: 5%;
+    }
+}
+
+
+/* TABLETS - Small (iPad Mini: 768px to 1023px) */
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 15px;
+        gap: 10px;
+    }
+    .user-menu {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
+    .container {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+    .container>div:nth-child(1),
+    .container>div:nth-child(2) {
+        grid-column: span 1;
+    }
+    .first {
+        flex-direction: column;
+        margin-left: 5px;
+        margin-right: 5px;
+        gap: 10px;
+    }
+    .first>div {
+        width: 100%;
+        height: 80px;
+    }
+    .second {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 0 5px;
+    }
+    .second>div {
+        padding: 15px;
+    }
+    .transaction-remainder {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        margin: 0 5px;
+    }
+    .transaction-remainder>div {
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+    }
+    .progres-graph {
+        margin: 0 5px;
+    }
+    .progres-graph>div {
+        width: 100%;
+        height: auto;
+        min-height: 300px;
+        margin-bottom: 10px;
+    }
+    .payment-container,
+    .add-money-container,
+    .reminder-container {
+        width: 85%;
+        left: 7.5%;
+        padding: 15px;
+        margin: 30px auto;
+    }
+    .dropbtn {
+        padding: 12px;
+        font-size: 14px;
+    }
+    .dropdown-content {
+        min-width: 140px;
+    }
+    .user-menu span {
+        font-size: 20px;
+        margin-right: 10px;
+    }
+    i {
+        font-size: 20px;
+    }
+}
+
+
+/* PHONES - Large (6-7 inches: 600px to 767px) */
+
+@media (max-width: 600px) {
+    body {
+        padding: 0;
+    }
+    header {
+        flex-direction: column;
+        height: auto;
+        padding: 12px;
+        margin-bottom: 5px;
+        gap: 8px;
+    }
+    .title {
+        font-size: 18px;
+    }
+    .user-menu {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .user-menu span {
+        font-size: 18px;
+        margin-right: 8px;
+    }
+    .dropbtn {
+        padding: 10px 12px;
+        font-size: 13px;
+    }
+    .dropdown-content {
+        min-width: 120px;
+        font-size: 14px;
+    }
+    .dropdown-content a {
+        padding: 10px 12px;
+    }
+    .container {
+        grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    .container>div:nth-child(1),
+    .container>div:nth-child(2) {
+        grid-column: span 1;
+    }
+    .first {
+        flex-direction: column;
+        margin-left: 5px;
+        margin-right: 5px;
+        gap: 8px;
+    }
+    .first>div {
+        width: 100%;
+        height: 70px;
+        padding: 8px;
+    }
+    .second {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin: 0 5px;
+    }
+    .second>div {
+        padding: 10px;
+    }
+    .transaction-remainder {
+        grid-template-columns: 1fr;
+        gap: 8px;
+        margin: 0 5px;
+    }
+    .transaction-remainder>div {
+        width: 100%;
+        padding: 8px;
+        height: auto;
+        min-height: 250px;
+    }
+    .progres-graph {
+        margin: 0 5px;
+    }
+    .progres-graph>div {
+        width: 100%;
+        padding: 8px;
+        height: auto;
+        min-height: 250px;
+        margin-bottom: 8px;
+    }
+    .transaction-item {
+        padding: 8px;
+        margin-bottom: 8px;
+    }
+    .payment-container,
+    .add-money-container,
+    .reminder-container {
+        width: 90%;
+        left: 5%;
+        padding: 15px;
+        margin: 20px auto;
+        position: fixed;
+        top: 50%;
+        left: 5%;
+        transform: translateY(-50%);
+    }
+    .payment-container h2,
+    .add-money-container h2,
+    .reminder-container h2 {
+        font-size: 18px;
+        margin-bottom: 15px;
+    }
+    .payment-container label,
+    .add-money-container label,
+    .reminder-container label {
+        font-size: 13px;
+    }
+    .add-money-container input[type="number"],
+    .payment-container input[type="number"],
+    .reminder-container input,
+    .reminder-container textarea,
+    select {
+        font-size: 14px;
+        padding: 8px;
+        margin-bottom: 12px;
+    }
+    .btn-pay,
+    .btn-add,
+    .btn-add-task {
+        padding: 8px;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+    .btn-Cancel,
+    .btn-Cancel-form,
+    .btn-Cancel-reminder {
+        font-size: 18px;
+    }
+    .reminder div {
+        padding: 5px;
+        margin-bottom: 8px;
+    }
+    .reminder div div:nth-child(1) {
+        padding: 8px;
+    }
+    .reminder button {
+        height: 22px;
+        width: 55px;
+        font-size: 12px;
+    }
+    i {
+        font-size: 18px;
+    }
+    .scroll {
+        max-height: 300px;
+    }
+}
+
+
+/* PHONES - Small (4-5 inches: 375px to 599px) */
+
+@media (max-width: 375px) {
+    header {
+        padding: 10px;
+        gap: 5px;
+    }
+    .title {
+        font-size: 16px;
+    }
+    .user-menu span {
+        font-size: 16px;
+        margin-right: 5px;
+    }
+    .dropbtn {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    .dropdown-content {
+        min-width: 100px;
+    }
+    .dropdown-content a {
+        padding: 8px 10px;
+        font-size: 12px;
+    }
+    .first>div {
+        height: 60px;
+        padding: 6px;
+    }
+    .second>div {
+        padding: 8px;
+    }
+    .transaction-remainder>div,
+    .progres-graph>div {
+        min-height: 200px;
+        padding: 6px;
+    }
+    .payment-container,
+    .add-money-container,
+    .reminder-container {
+        width: 95%;
+        left: 2.5%;
+        padding: 12px;
+    }
+    .payment-container h2,
+    .add-money-container h2,
+    .reminder-container h2 {
+        font-size: 16px;
+        margin-bottom: 12px;
+    }
+    .payment-container label,
+    .add-money-container label,
+    .reminder-container label {
+        font-size: 12px;
+        margin-bottom: 3px;
+    }
+    .add-money-container input[type="number"],
+    .payment-container input[type="number"],
+    .reminder-container input,
+    .reminder-container textarea,
+    select {
+        font-size: 13px;
+        padding: 7px;
+        margin-bottom: 10px;
+    }
+    .btn-pay,
+    .btn-add,
+    .btn-add-task {
+        padding: 7px;
+        font-size: 13px;
+        margin-bottom: 6px;
+    }
+    .btn-Cancel,
+    .btn-Cancel-form,
+    .btn-Cancel-reminder {
+        font-size: 16px;
+    }
+    .reminder button {
+        height: 20px;
+        width: 50px;
+        font-size: 11px;
+    }
+    i {
+        font-size: 16px;
+    }
+    .transaction-item {
+        padding: 6px;
+        font-size: 13px;
+    }
 }

@@ -47,6 +47,8 @@ type CategoryAmount = {
     amount: number;
 }
 
+declare const Chart: any;
+
 
 
 
@@ -186,7 +188,8 @@ btnPay.addEventListener('click', function(e) {
     updateBillsBalance();
     updateOtherBalance();
     updateFoodAndDrinkBalance();
-    // renderChart();
+    // Update chart dynamically with new data
+    renderChart();
     updateLocalStorage();
     
     paymentContainer.style.display = 'none';
@@ -201,6 +204,8 @@ btnAddMoney.addEventListener('click', function(e) {
 
     updateLocalStorage();
     updateBalance();
+    // Update chart dynamically when income is added
+    renderChart();
     
     addMoneyContainer.style.display = 'none';
     body.classList.remove('blurred');
@@ -255,7 +260,7 @@ function renderTransaction(trans: Transactions): void {
                     </div>
                     <hr> 
                 `;
-    trasactionHistory.insertAdjacentHTML('afterend', html);
+    trasactionHistory.insertAdjacentHTML('afterbegin', html);
 }
 
 function updateBalance(): void {
@@ -376,23 +381,30 @@ function deleteReminder(description: string): void {
     }
 }
 
-const totalIncome = balance.reduce(function (acc, curr) { return acc + curr; }, 0) - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance
+let chartInstance: any = null;
+
 function renderChart() {
     const ctx = (document.getElementById('myChart') as HTMLCanvasElement).getContext('2d');
-
 
     const totalSchoolFeesBalance = schoolFees.reduce((acc, curr) => acc + curr, 0);
     const totalFoodAndDrinkBalance = foodAndDrink.reduce((acc, curr) => acc + curr, 0);
     const totalOtherBalance = other.reduce((acc, curr) => acc + curr, 0);
     const totalBills = billsAndUtilities.reduce((acc, curr) => acc + curr, 0);
+    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
+    const totalIncome = totalBalance - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
 
-    new Chart(ctx, {
+    // Destroy existing chart if it exists
+    if (chartInstance) {
+        chartInstance.destroy();
+    }
+
+    chartInstance = new Chart(ctx, {
         type: 'doughnut',
         data: {
             labels: ['School', 'Food and Drink', 'Bills and Utilities', 'Other','Income'],
             datasets: [{
                 label: 'Transaction Amount',
-                data: [totalSchoolFeesBalance, totalFoodAndDrinkBalance, totalBills, totalOtherBalance,totalIncome],
+                data: [totalSchoolFeesBalance, totalFoodAndDrinkBalance, totalBills, totalOtherBalance, totalIncome],
                 backgroundColor: [
                     'rgba(30, 144, 255)',
                     'rgba(255, 99, 71)',
