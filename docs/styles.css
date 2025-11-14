@@ -1,3 +1,7 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -35,10 +39,11 @@ main.blurred {
 header {
     background-color: #2dd7a1;
     color: #fff;
-    padding: 20px;
+    padding: 12px 20px;
     display: flex;
     justify-content: space-between;
-    height: 50px;
+    align-items: center;
+    flex-wrap: wrap;
     margin-bottom: 10px;
 }
 
@@ -121,11 +126,18 @@ header {
     font-size: 25px;
 }
 
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
 .container {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 5px;
     background-color: #e0e5eb;
+    padding: 0 5px;
 }
 
 .container>div:nth-child(1) {
@@ -145,6 +157,16 @@ header {
     margin-right: 10px;
 }
 
+.first>div p {
+    margin: 2px 0;
+    font-size: 0.9em;
+}
+
+.first>div span {
+    font-weight: bold;
+    display: block;
+}
+
 .first>div {
     border: none;
     border-radius: 4px;
@@ -152,6 +174,12 @@ header {
     width: 200px;
     height: 100px;
     background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    overflow: visible;
 }
 
 .second {
@@ -176,8 +204,9 @@ header {
     border: none;
     border-radius: 4px;
     padding: 10px;
-    width: 95%;
+    width: 100%;
     height: 450px;
+    overflow: hidden;
 }
 
 
@@ -199,9 +228,10 @@ header {
     border: none;
     border-radius: 4px;
     padding: 10px;
-    width: 95%;
+    width: 100%;
     height: 450px;
     background-color: white;
+    overflow: hidden;
 }
 
 .transaction>div {
@@ -378,7 +408,7 @@ select {
 }
 
 i {
-    font-size: 25px;
+    font-size: 18px;
     z-index: 1;
 }
 
@@ -531,6 +561,8 @@ i {
     .first>div {
         width: 100%;
         height: 80px;
+        font-size: 11px;
+        padding: 5px;
     }
     .second {
         grid-template-columns: 1fr;
@@ -639,6 +671,35 @@ i {
         width: 100%;
         height: 70px;
         padding: 8px;
+        font-size: 10px;
+    }
+    /* Mobile: place icon to the left and text to the right for better visibility */
+    .first>div {
+        display: grid;
+        grid-template-columns: 44px 1fr;
+        grid-auto-rows: min-content;
+        column-gap: 10px;
+        align-items: center;
+        padding-left: 6px;
+    }
+    .first>div i {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        font-size: 26px;
+    }
+    .first>div p {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        text-align: left;
+        font-size: 14px;
+    }
+    .first>div span {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 2px;
+        font-size: 16px;
+        text-align: left;
     }
     .second {
         grid-template-columns: 1fr;
@@ -766,6 +827,35 @@ i {
     .first>div {
         height: 60px;
         padding: 6px;
+        font-size: 9px;
+    }
+    /* Smaller phones: left-icon layout with slightly reduced sizes */
+    .first>div {
+        display: grid;
+        grid-template-columns: 40px 1fr;
+        grid-auto-rows: min-content;
+        column-gap: 8px;
+        align-items: center;
+        padding-left: 6px;
+    }
+    .first>div i {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        font-size: 22px;
+    }
+    .first>div p {
+        grid-column: 2;
+        grid-row: 1;
+        margin: 0;
+        text-align: left;
+        font-size: 13px;
+    }
+    .first>div span {
+        grid-column: 2;
+        grid-row: 2;
+        margin-top: 2px;
+        font-size: 15px;
+        text-align: left;
     }
     .second>div {
         padding: 8px;

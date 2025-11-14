@@ -1,99 +1,95 @@
-"use strict";
-const btnPay = document.querySelector('.btn-pay');
-const amountInput = document.querySelector('#amount');
-const categoryInput = document.querySelector('#Categories');
-const paymentForm = document.querySelector('.payment-form');
-const trasactionHistory = document.querySelector('.transaction > div');
-const btnPayment = document.querySelector('.btn-payment');
-const paymentContainer = document.querySelector('.payment-container');
-const btnCancel = document.querySelector('.btn-Cancel');
-const btnIncome = document.querySelector('.btn-income');
-const addMoneyContainer = document.querySelector('.add-money-container');
-const btnCancelForm = document.querySelector('.btn-Cancel-form');
-const addAmountInput = document.querySelector('#Add-amount');
-const addMoneyForm = document.querySelector('.add-money-form');
-const btnAddMoney = document.querySelector('.btn-add');
-const balanceText = document.querySelector('.balance span');
-const btnReminder = document.querySelector('.btn-reminder');
-const reminderContainer = document.querySelector('.reminder-container');
-const btnCancelReminder = document.querySelector('.btn-Cancel-reminder');
-const btnAddTask = document.querySelector('.btn-add-task');
-const taskDescriptionInput = document.querySelector('#task');
-const reminderDateInput = document.querySelector('#date');
-const reminderHistory = document.querySelector('.reminder');
-const billsBalance = document.querySelector('.BU-balance span');
-const foodAndDrinkBalance = document.querySelector('.FD-balance span');
-const otherBalance = document.querySelector('.other span');
-const schoolBalance = document.querySelector('.School-balance span');
-const checkboxInput = document.querySelector('#checkbox');
-const setReminderForm = document.querySelector('.set-reminder-form');
-const userName = document.querySelector('.user');
-const body = document.querySelector('main');
+var btnPay = document.querySelector('.btn-pay');
+var amountInput = document.querySelector('#amount');
+var categoryInput = document.querySelector('#Categories');
+var paymentForm = document.querySelector('.payment-form');
+var trasactionHistory = document.querySelector('.transaction');
+var btnPayment = document.querySelector('.btn-payment');
+var paymentContainer = document.querySelector('.payment-container');
+var btnCancel = document.querySelector('.btn-Cancel');
+var btnIncome = document.querySelector('.btn-income');
+var addMoneyContainer = document.querySelector('.add-money-container');
+var btnCancelForm = document.querySelector('.btn-Cancel-form');
+var addAmountInput = document.querySelector('#Add-amount');
+var addMoneyForm = document.querySelector('.add-money-form');
+var btnAddMoney = document.querySelector('.btn-add');
+var balanceText = document.querySelector('.balance span');
+var btnReminder = document.querySelector('.btn-reminder');
+var reminderContainer = document.querySelector('.reminder-container');
+var btnCancelReminder = document.querySelector('.btn-Cancel-reminder');
+var btnAddTask = document.querySelector('.btn-add-task');
+var taskDescriptionInput = document.querySelector('#task');
+var reminderDateInput = document.querySelector('#date');
+var reminderHistory = document.querySelector('.reminder');
+var billsBalance = document.querySelector('.BU-balance span');
+var foodAndDrinkBalance = document.querySelector('.FD-balance span');
+var otherBalance = document.querySelector('.other span');
+var schoolBalance = document.querySelector('.School-balance span');
+var checkboxInput = document.querySelector('#checkbox');
+var setReminderForm = document.querySelector('.set-reminder-form');
+var userName = document.querySelector('.user');
+var body = document.querySelector('main');
 console.log(paymentContainer);
-const currentUserEmail = localStorage.getItem("current_user_email");
-const reminderArray = loadReminders();
-const transactions = loadTransactions();
-const balance = loadBalance();
-const schoolFees = loadSchoolFees();
-const foodAndDrink = loadFoodAndDrink();
-const billsAndUtilities = loadBills();
-const other = loadOther();
-const names = currentUserEmail.split('@');
+var currentUserEmail = localStorage.getItem("current_user_email");
+var reminderArray = loadReminders();
+var transactions = loadTransactions();
+var balance = loadBalance();
+var schoolFees = loadSchoolFees();
+var foodAndDrink = loadFoodAndDrink();
+var billsAndUtilities = loadBills();
+var other = loadOther();
+var names = currentUserEmail.split('@');
 
 function displayUser() {
-    userName.textContent = `Welcome ${names[0]}`;
+    userName.textContent = "Welcome ".concat(names[0]);
 }
 
 function loadReminders() {
-    const retrievedReminders = localStorage.getItem(`reminder_${currentUserEmail}`);
+    var retrievedReminders = localStorage.getItem("reminder_".concat(currentUserEmail));
     return retrievedReminders ? JSON.parse(retrievedReminders) : [];
 }
 
 function loadTransactions() {
-    const loadedValue = localStorage.getItem(`transaction_${currentUserEmail}`);
-    return loadedValue ? JSON.parse(loadedValue).map((trans) => ({
-        ...trans,
-        date: new Date(trans.date)
-    })) : [];
+    var loadedValue = localStorage.getItem("transaction_".concat(currentUserEmail));
+    return loadedValue ? JSON.parse(loadedValue).map(function(trans) { return { category: trans.category, amount: trans.amount, date: typeof trans.date === 'string' ? new Date(trans.date) : trans.date }; }) : [];
 }
 
 function loadBalance() {
-    const retrievedBalance = localStorage.getItem(`balance_${currentUserEmail}`);
+    var retrievedBalance = localStorage.getItem("balance_".concat(currentUserEmail));
     return retrievedBalance ? JSON.parse(retrievedBalance) : [];
 }
 
 function loadBills() {
-    const loadValue = localStorage.getItem(`bills_${currentUserEmail}`);
+    var loadValue = localStorage.getItem("bills_".concat(currentUserEmail));
     return loadValue ? JSON.parse(loadValue) : [];
 }
 
 function loadSchoolFees() {
-    const loadValue = localStorage.getItem(`school_${currentUserEmail}`);
+    var loadValue = localStorage.getItem("school_".concat(currentUserEmail));
     return loadValue ? JSON.parse(loadValue) : [];
 }
 
 function loadOther() {
-    const loadValue = localStorage.getItem(`other_${currentUserEmail}`);
+    var loadValue = localStorage.getItem("other_".concat(currentUserEmail));
     return loadValue ? JSON.parse(loadValue) : [];
 }
 
 function loadFoodAndDrink() {
-    const loadValue = localStorage.getItem(`food_${currentUserEmail}`);
+    var loadValue = localStorage.getItem("food_".concat(currentUserEmail));
     return loadValue ? JSON.parse(loadValue) : [];
 }
-const totalSchoolFeesBalance = schoolFees.reduce(function(acc, curr) {
+var totalSchoolFeesBalance = schoolFees.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalFoodAndDrinkBalance = foodAndDrink.reduce(function(acc, curr) {
+var totalFoodAndDrinkBalance = foodAndDrink.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalOtherBalance = other.reduce(function(acc, curr) {
+var totalOtherBalance = other.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalBills = billsAndUtilities.reduce(function(acc, curr) {
+var totalBills = billsAndUtilities.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
-const totalBalance = balance.reduce(function(acc, curr) {
+var totalBalance = balance.reduce(function(acc, curr) {
     return acc + curr;
 }, 0);
 btnReminder.addEventListener('click', function(e) {
@@ -129,20 +125,28 @@ btnIncome.addEventListener('click', function(e) {
 });
 btnPay.addEventListener('click', function(e) {
     e.preventDefault();
-    const transactionItem = {
+    var transactionItem = {
         category: categoryInput.value,
         amount: +(amountInput.value),
         date: new Date(),
     };
-    const categoryAmount = {
+    var categoryAmount = {
         category: categoryInput.value,
         amount: +(amountInput.value),
     };
-    categoryUpdate(categoryAmount);
-    if (transactionItem.amount <= totalBalance) {
+    // Calculate current balance before categoryUpdate
+    var currentTotalBalance = balance.reduce(function(acc, curr) { return acc + curr; }, 0);
+    if (categoryAmount.amount <= currentTotalBalance) {
+        categoryUpdate(categoryAmount);
         transactions.push(transactionItem);
         updateTransactionStorage();
         renderTransaction(transactionItem);
+    } else {
+        alert("Insufficient funds, please deposit to withdraw...");
+        paymentContainer.style.display = 'none';
+        body.classList.remove('blurred');
+        paymentForm.reset();
+        return;
     }
     // Update the balances dynamically
     updateBalance();
@@ -159,7 +163,7 @@ btnPay.addEventListener('click', function(e) {
 });
 btnAddMoney.addEventListener('click', function(e) {
     e.preventDefault();
-    const newAmount = Number(addAmountInput.value);
+    var newAmount = Number(addAmountInput.value);
     balance.push(newAmount);
     updateLocalStorage();
     updateBalance();
@@ -171,7 +175,7 @@ btnAddMoney.addEventListener('click', function(e) {
 });
 btnAddTask.addEventListener('click', function(e) {
     e.preventDefault();
-    const reminderItem = {
+    var reminderItem = {
         description: taskDescriptionInput.value,
         date: reminderDateInput.value,
         complete: checkboxInput.checked,
@@ -185,138 +189,96 @@ btnAddTask.addEventListener('click', function(e) {
 });
 
 function displayReminderTask(reminder) {
-    const html = `
-                     <div>
-                            <div>
-                                <span>${reminder.description}</span>
-                                <input type="checkbox" ${reminder.complete ? 'checked' : ''} onchange="toggleReminderComplete('${reminder.description}')">
-                            </div>
-                            <br>
-                            <div>
-                                ${reminder.date}
-                            </div>
-                            <div>
-                                
-                                <button onclick="deleteReminder('${reminder.description}')">Delete</button>
-                            </div>
-                    </div>
-                    <br>
-                    `;
+    var html = "\n                     <div>\n                            <div>\n                                <span>".concat(reminder.description, "</span>\n                                <input type=\"checkbox\" ").concat(reminder.complete ? 'checked' : '', " onchange=\"toggleReminderComplete('").concat(reminder.description, "')\">\n                            </div>\n                            <br>\n                            <div>\n                                ").concat(reminder.date, "\n                            </div>\n                            <div>\n                                \n                                <button onclick=\"deleteReminder('").concat(reminder.description, "')\">Delete</button>\n                            </div>\n                    </div>\n                    <br>\n                    ");
     reminderHistory.insertAdjacentHTML('afterbegin', html);
 }
 
 function renderTransaction(trans) {
-    const html = `
-                     <div class="transaction-item">
-                        <span class="cat ${trans.category}">${trans.category}</span>
-                        <span class="amt">ZMW ${(trans.amount).toFixed(2)}</span>
-                        <span class="date">${(trans.date.getDate()) + 1}:${trans.date.getMonth() + 1}:${trans.date.getFullYear()}</span>
-                    </div>
-                    <hr> 
-                `;
+    var html = "<div class=\"transaction-item\">\n                        <span class=\"cat ".concat(trans.category, "\">").concat(trans.category, "</span>\n                        <span class=\"amt\">ZMW ").concat((trans.amount).toFixed(2), "</span>\n                        <span class=\"date\">").concat((trans.date.getDate()) + 1, ":").concat(trans.date.getMonth() + 1, ":").concat(trans.date.getFullYear(), "</span>\n                    </div>\n                    <hr>");
     trasactionHistory.insertAdjacentHTML('afterbegin', html);
 }
 
 function updateBalance() {
-    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
-    balanceText.textContent = `${totalBalance}`;
+    var totalBalance = balance.reduce(function(acc, curr) { return acc + curr; }, 0);
+    balanceText.textContent = "".concat(totalBalance);
 }
 
 function updateSchoolFeesBalance() {
-    const totalSchoolFeesBalance = schoolFees.reduce((acc, curr) => acc + curr, 0);
-    schoolBalance.textContent = `${totalSchoolFeesBalance}`;
+    var totalSchoolFeesBalance = schoolFees.reduce(function(acc, curr) { return acc + curr; }, 0);
+    schoolBalance.textContent = "".concat(totalSchoolFeesBalance);
 }
 
 function updateBillsBalance() {
-    const totalBills = billsAndUtilities.reduce((acc, curr) => acc + curr, 0);
-    billsBalance.textContent = `${totalBills}`;
+    var totalBills = billsAndUtilities.reduce(function(acc, curr) { return acc + curr; }, 0);
+    billsBalance.textContent = "".concat(totalBills);
 }
 
 function updateOtherBalance() {
-    const totalOtherBalance = other.reduce((acc, curr) => acc + curr, 0);
-    otherBalance.textContent = `${totalOtherBalance}`;
+    var totalOtherBalance = other.reduce(function(acc, curr) { return acc + curr; }, 0);
+    otherBalance.textContent = "".concat(totalOtherBalance);
 }
 
 function updateFoodAndDrinkBalance() {
-    const totalFoodAndDrinkBalance = foodAndDrink.reduce((acc, curr) => acc + curr, 0);
-    foodAndDrinkBalance.textContent = `${totalFoodAndDrinkBalance}`;
+    var totalFoodAndDrinkBalance = foodAndDrink.reduce(function(acc, curr) { return acc + curr; }, 0);
+    foodAndDrinkBalance.textContent = "".concat(totalFoodAndDrinkBalance);
 }
 
 function updateLocalStorage() {
-    localStorage.setItem(`balance_${currentUserEmail}`, JSON.stringify(balance));
+    localStorage.setItem("balance_".concat(currentUserEmail), JSON.stringify(balance));
 }
 
 function categoryUpdate(catAmount) {
-    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
     if (catAmount.category === 'School') {
-        if (catAmount.amount <= totalBalance) {
-            schoolFees.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateSchoolStorage();
-            updateSchoolFeesBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw...");
-        }
+        schoolFees.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateSchoolStorage();
+        updateSchoolFeesBalance();
     } else if (catAmount.category === 'Food and Drink') {
-        if (catAmount.amount <= totalBalance) {
-            foodAndDrink.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateFoodAndDrinkStorage();
-            updateFoodAndDrinkBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw");
-        }
+        foodAndDrink.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateFoodAndDrinkStorage();
+        updateFoodAndDrinkBalance();
     } else if (catAmount.category === 'Bill and Utilities') {
-        if (catAmount.amount <= totalBalance) {
-            billsAndUtilities.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateBillAndUtilitiesStorage();
-            updateBillsBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw");
-        }
+        billsAndUtilities.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateBillAndUtilitiesStorage();
+        updateBillsBalance();
     } else if (catAmount.category === 'Other') {
-        if (catAmount.amount <= totalBalance) {
-            other.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateOtherStorage();
-            updateOtherBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw");
-        }
-    } else {
-        return;
+        other.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateOtherStorage();
+        updateOtherBalance();
     }
     updateLocalStorage();
     updateBalance();
 }
 
 function updateReminderStorage() {
-    localStorage.setItem(`reminder_${currentUserEmail}`, JSON.stringify(reminderArray));
+    localStorage.setItem("reminder_".concat(currentUserEmail), JSON.stringify(reminderArray));
 }
 
 function updateTransactionStorage() {
-    localStorage.setItem(`transaction_${currentUserEmail}`, JSON.stringify(transactions));
+    localStorage.setItem("transaction_".concat(currentUserEmail), JSON.stringify(transactions));
 }
 
 function updateSchoolStorage() {
-    localStorage.setItem(`school_${currentUserEmail}`, JSON.stringify(schoolFees));
+    localStorage.setItem("school_".concat(currentUserEmail), JSON.stringify(schoolFees));
 }
 
 function updateBillAndUtilitiesStorage() {
-    localStorage.setItem(`bills_${currentUserEmail}`, JSON.stringify(billsAndUtilities));
+    localStorage.setItem("bills_".concat(currentUserEmail), JSON.stringify(billsAndUtilities));
 }
 
 function updateFoodAndDrinkStorage() {
-    localStorage.setItem(`food_${currentUserEmail}`, JSON.stringify(foodAndDrink));
+    localStorage.setItem("food_".concat(currentUserEmail), JSON.stringify(foodAndDrink));
 }
 
 function updateOtherStorage() {
-    localStorage.setItem(`other_${currentUserEmail}`, JSON.stringify(other));
+    localStorage.setItem("other_".concat(currentUserEmail), JSON.stringify(other));
 }
 
 function toggleReminderComplete(description) {
-    const reminder = reminderArray.find(rem => rem.description === description);
+    var reminder = reminderArray.find(function(rem) { return rem.description === description; });
     if (reminder) {
         reminder.complete = !reminder.complete;
         updateReminderStorage();
@@ -325,24 +287,23 @@ function toggleReminderComplete(description) {
 }
 
 function deleteReminder(description) {
-    const index = reminderArray.findIndex(rem => rem.description === description);
+    var index = reminderArray.findIndex(function(rem) { return rem.description === description; });
     if (index > -1) {
         reminderArray.splice(index, 1);
         updateReminderStorage();
         renderReminders();
     }
 }
-const totalIncome = balance.reduce(function(acc, curr) { return acc + curr; }, 0) - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
-let chartInstance = null;
+var chartInstance = null;
 
 function renderChart() {
-    const ctx = document.getElementById('myChart').getContext('2d');
-    const totalSchoolFeesBalance = schoolFees.reduce((acc, curr) => acc + curr, 0);
-    const totalFoodAndDrinkBalance = foodAndDrink.reduce((acc, curr) => acc + curr, 0);
-    const totalOtherBalance = other.reduce((acc, curr) => acc + curr, 0);
-    const totalBills = billsAndUtilities.reduce((acc, curr) => acc + curr, 0);
-    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
-    const totalIncome = totalBalance - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
+    var ctx = document.getElementById('myChart').getContext('2d');
+    var totalSchoolFeesBalance = schoolFees.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var totalFoodAndDrinkBalance = foodAndDrink.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var totalOtherBalance = other.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var totalBills = billsAndUtilities.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var totalBalance = balance.reduce(function(acc, curr) { return acc + curr; }, 0);
+    var totalIncome = totalBalance - totalBills - totalSchoolFeesBalance - totalFoodAndDrinkBalance - totalOtherBalance;
     // Destroy existing chart if it exists
     if (chartInstance) {
         chartInstance.destroy();
@@ -437,7 +398,142 @@ window.addEventListener('DOMContentLoaded', function() {
     updateFoodAndDrinkBalance();
     renderChart();
     displayUser();
+    // Show upcoming reminders within 3 days on load
+    showUpcomingNotifications(3);
 });
+
+function parseReminderDate(dateStr) {
+    return new Date(dateStr);
+}
+
+function daysUntil(date) {
+    var now = new Date();
+    var diff = date.getTime() - now.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+function getUpcomingReminders(days) {
+    return reminderArray.filter(function(r) { return !r.complete && daysUntil(parseReminderDate(r.date)) <= days; });
+}
+
+function showUpcomingNotifications(days) {
+    var upcoming = getUpcomingReminders(days);
+    console.log("Upcoming reminders:", upcoming);
+    if (!upcoming || upcoming.length === 0) {
+        console.log("No upcoming reminders within " + days + " days");
+        return;
+    }
+    // avoid duplicate panel
+    if (document.getElementById('upcoming-notifications'))
+        return;
+    var panel = document.createElement('div');
+    panel.id = 'upcoming-notifications';
+    panel.style.position = 'fixed';
+    panel.style.right = '20px';
+    panel.style.bottom = '20px';
+    panel.style.background = '#fff';
+    panel.style.border = '2px solid #ff6b6b';
+    panel.style.padding = '15px';
+    panel.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    panel.style.zIndex = '9999';
+    panel.style.maxWidth = '320px';
+    panel.style.borderRadius = '8px';
+    panel.style.fontFamily = 'Arial, sans-serif';
+    var title = document.createElement('div');
+    title.textContent = "Upcoming reminders (".concat(upcoming.length, ")");
+    title.style.fontWeight = 'bold';
+    title.style.marginBottom = '10px';
+    title.style.color = '#ff6b6b';
+    title.style.fontSize = '16px';
+    panel.appendChild(title);
+    upcoming.forEach(function(rem) {
+        var item = document.createElement('div');
+        item.style.borderTop = '1px solid #eee';
+        item.style.paddingTop = '10px';
+        item.style.marginTop = '10px';
+        var desc = document.createElement('div');
+        desc.textContent = rem.description;
+        desc.style.fontWeight = 'bold';
+        desc.style.marginBottom = '4px';
+        item.appendChild(desc);
+        var date = document.createElement('div');
+        date.textContent = "Due: " + rem.date;
+        date.style.fontSize = '12px';
+        date.style.color = '#666';
+        date.style.marginBottom = '8px';
+        item.appendChild(date);
+        var controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.gap = '8px';
+        controls.style.marginTop = '8px';
+        var markBtn = document.createElement('button');
+        markBtn.textContent = 'Mark complete';
+        markBtn.style.padding = '4px 8px';
+        markBtn.style.backgroundColor = '#4CAF50';
+        markBtn.style.color = '#fff';
+        markBtn.style.border = 'none';
+        markBtn.style.borderRadius = '4px';
+        markBtn.style.cursor = 'pointer';
+        markBtn.style.fontSize = '12px';
+        markBtn.onclick = function() {
+            toggleReminderComplete(rem.description);
+            if (item.parentNode)
+                item.parentNode.removeChild(item);
+            if (document.getElementById('upcoming-notifications')) {
+                // update count
+                var t = document.querySelector('#upcoming-notifications > div:first-child');
+                if (t) {
+                    var remaining = getUpcomingReminders(days).length;
+                    if (remaining === 0) {
+                        var p = document.getElementById('upcoming-notifications');
+                        if (p && p.parentNode) p.parentNode.removeChild(p);
+                    } else {
+                        t.textContent = "Upcoming reminders (".concat(remaining, ")");
+                    }
+                }
+            }
+        };
+        var dismissBtn = document.createElement('button');
+        dismissBtn.textContent = 'Dismiss';
+        dismissBtn.style.padding = '4px 8px';
+        dismissBtn.style.backgroundColor = '#f44336';
+        dismissBtn.style.color = '#fff';
+        dismissBtn.style.border = 'none';
+        dismissBtn.style.borderRadius = '4px';
+        dismissBtn.style.cursor = 'pointer';
+        dismissBtn.style.fontSize = '12px';
+        dismissBtn.onclick = function() {
+            if (item.parentNode)
+                item.parentNode.removeChild(item);
+            if (getUpcomingReminders(days).length === 0) {
+                var p = document.getElementById('upcoming-notifications');
+                if (p && p.parentNode)
+                    p.parentNode.removeChild(p);
+            }
+        };
+        controls.appendChild(markBtn);
+        controls.appendChild(dismissBtn);
+        item.appendChild(controls);
+        panel.appendChild(item);
+    });
+    var closeAll = document.createElement('button');
+    closeAll.textContent = 'Close';
+    closeAll.style.marginTop = '12px';
+    closeAll.style.width = '100%';
+    closeAll.style.padding = '8px';
+    closeAll.style.backgroundColor = '#666';
+    closeAll.style.color = '#fff';
+    closeAll.style.border = 'none';
+    closeAll.style.borderRadius = '4px';
+    closeAll.style.cursor = 'pointer';
+    closeAll.onclick = function() {
+        var p = document.getElementById('upcoming-notifications');
+        if (p && p.parentNode)
+            p.parentNode.removeChild(p);
+    };
+    panel.appendChild(closeAll);
+    document.body.appendChild(panel);
+}
 
 function renderReminders() {
     reminderHistory.innerHTML = '';

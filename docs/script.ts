@@ -2,7 +2,7 @@ const btnPay = document.querySelector('.btn-pay') as HTMLButtonElement;
 const amountInput = document.querySelector('#amount') as HTMLInputElement;
 const categoryInput = document.querySelector('#Categories') as HTMLSelectElement;
 const paymentForm = document.querySelector('.payment-form') as HTMLFormElement;
-const trasactionHistory = document.querySelector('.transaction > div') as HTMLDivElement;
+const trasactionHistory = document.querySelector('.transaction') as HTMLDivElement;
 const btnPayment = document.querySelector('.btn-payment') as HTMLButtonElement;
 const paymentContainer = document.querySelector('.payment-container') as HTMLDivElement;
 const btnCancel = document.querySelector('.btn-Cancel') as HTMLButtonElement;
@@ -74,9 +74,9 @@ function loadReminders(): Reminder[] {
 
 function loadTransactions(): Transactions[] {
     const loadedValue = localStorage.getItem(`transaction_${currentUserEmail}`);
-    return loadedValue ? JSON.parse(loadedValue).map((trans: Transactions) => ({
+    return loadedValue ? JSON.parse(loadedValue).map((trans: any) => ({
         ...trans,
-        date: new Date(trans.date)
+        date: typeof trans.date === 'string' ? new Date(trans.date) : trans.date
     })) : [];
 }
 
@@ -175,11 +175,20 @@ btnPay.addEventListener('click', function(e) {
         amount: +(amountInput.value),
     }
 
-    categoryUpdate(categoryAmount);
-    if (transactionItem.amount <= totalBalance) {
+    // Calculate current balance before categoryUpdate
+    const currentTotalBalance = balance.reduce((acc, curr) => acc + curr, 0);
+    
+    if (categoryAmount.amount <= currentTotalBalance) {
+        categoryUpdate(categoryAmount);
         transactions.push(transactionItem);
         updateTransactionStorage();
         renderTransaction(transactionItem);
+    } else {
+        alert("Insufficient funds, please deposit to withdraw...");
+        paymentContainer.style.display = 'none';
+        body.classList.remove('blurred');
+        paymentForm.reset();
+        return;
     }
 
     // Update the balances dynamically
@@ -252,14 +261,12 @@ function displayReminderTask(reminder: Reminder): void {
 }
 
 function renderTransaction(trans: Transactions): void {
-    const html = `
-                     <div class="transaction-item">
+    const html = `<div class="transaction-item">
                         <span class="cat ${trans.category}">${trans.category}</span>
                         <span class="amt">ZMW ${(trans.amount).toFixed(2)}</span>
                         <span class="date">${(trans.date.getDate()) + 1}:${trans.date.getMonth() + 1}:${trans.date.getFullYear()}</span>
                     </div>
-                    <hr> 
-                `;
+                    <hr>`;
     trasactionHistory.insertAdjacentHTML('afterbegin', html);
 }
 
@@ -293,47 +300,26 @@ function updateLocalStorage(): void {
 }
 
 function categoryUpdate(catAmount: CategoryAmount) {
-    const totalBalance = balance.reduce((acc, curr) => acc + curr, 0);
-
     if (catAmount.category === 'School') {
-        if (catAmount.amount <= totalBalance) {
-            schoolFees.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateSchoolStorage();
-            updateSchoolFeesBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw...");
-        }
-
+        schoolFees.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateSchoolStorage();
+        updateSchoolFeesBalance();
     } else if (catAmount.category === 'Food and Drink') {
-        if (catAmount.amount <= totalBalance) {
-            foodAndDrink.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateFoodAndDrinkStorage();
-            updateFoodAndDrinkBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw")
-        }
+        foodAndDrink.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateFoodAndDrinkStorage();
+        updateFoodAndDrinkBalance();
     } else if (catAmount.category === 'Bill and Utilities') {
-        if (catAmount.amount <= totalBalance) {
-            billsAndUtilities.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateBillAndUtilitiesStorage();
-            updateBillsBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw");
-        }
+        billsAndUtilities.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateBillAndUtilitiesStorage();
+        updateBillsBalance();
     } else if (catAmount.category === 'Other') {
-        if (catAmount.amount <= totalBalance) {
-            other.push(catAmount.amount);
-            balance.push((-1) * (catAmount.amount));
-            updateOtherStorage();
-            updateOtherBalance();
-        } else {
-            alert("Insufficient funds, please deposit to withdraw");
-        }
-    } else {
-        return;
+        other.push(catAmount.amount);
+        balance.push((-1) * (catAmount.amount));
+        updateOtherStorage();
+        updateOtherBalance();
     }
     updateLocalStorage();
     updateBalance();
@@ -364,7 +350,7 @@ function updateOtherStorage() {
 }
 
 function toggleReminderComplete(description: string): void {
-    const reminder = reminderArray.find(rem => rem.description === description);
+    const reminder = (reminderArray as any[]).find((rem: any) => rem.description === description);
     if (reminder) {
         reminder.complete = !reminder.complete;
         updateReminderStorage();
@@ -373,7 +359,7 @@ function toggleReminderComplete(description: string): void {
 }
 
 function deleteReminder(description: string): void {
-    const index = reminderArray.findIndex(rem => rem.description === description);
+    const index = (reminderArray as any[]).findIndex((rem: any) => rem.description === description);
     if (index > -1) {
         reminderArray.splice(index, 1);
         updateReminderStorage();
@@ -498,7 +484,109 @@ window.addEventListener('DOMContentLoaded', function() {
     updateFoodAndDrinkBalance();
     renderChart();
     displayUser()
+    // Show upcoming reminders within 3 days on load
+    showUpcomingNotifications(3);
 });
+
+function parseReminderDate(dateStr: string): Date {
+    return new Date(dateStr);
+}
+
+function daysUntil(date: Date): number {
+    const now = new Date();
+    const diff = date.getTime() - now.getTime();
+    return Math.ceil(diff / (1000 * 60 * 60 * 24));
+}
+
+function getUpcomingReminders(days: number): Reminder[] {
+    return reminderArray.filter(r => !r.complete && daysUntil(parseReminderDate(r.date)) <= days);
+}
+
+function showUpcomingNotifications(days: number): void {
+    const upcoming = getUpcomingReminders(days);
+    if (!upcoming || upcoming.length === 0) return;
+
+    // avoid duplicate panel
+    if (document.getElementById('upcoming-notifications')) return;
+
+    const panel = document.createElement('div');
+    panel.id = 'upcoming-notifications';
+    panel.style.position = 'fixed';
+    panel.style.right = '20px';
+    panel.style.bottom = '20px';
+    panel.style.background = '#fff';
+    panel.style.border = '1px solid #ccc';
+    panel.style.padding = '12px';
+    panel.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+    panel.style.zIndex = '9999';
+    panel.style.maxWidth = '320px';
+
+    const title = document.createElement('div');
+    title.textContent = `Upcoming reminders (${upcoming.length})`;
+    title.style.fontWeight = '600';
+    title.style.marginBottom = '8px';
+    panel.appendChild(title);
+
+    upcoming.forEach(rem => {
+        const item = document.createElement('div');
+        item.style.borderTop = '1px solid #eee';
+        item.style.paddingTop = '8px';
+        item.style.marginTop = '8px';
+
+        const desc = document.createElement('div');
+        desc.textContent = rem.description;
+        item.appendChild(desc);
+
+        const date = document.createElement('div');
+        date.textContent = rem.date;
+        date.style.fontSize = '12px';
+        date.style.color = '#666';
+        item.appendChild(date);
+
+        const controls = document.createElement('div');
+        controls.style.display = 'flex';
+        controls.style.gap = '8px';
+        controls.style.marginTop = '8px';
+
+        const markBtn = document.createElement('button');
+        markBtn.textContent = 'Mark complete';
+        markBtn.onclick = function() {
+            toggleReminderComplete(rem.description);
+            if (item.parentNode) item.parentNode.removeChild(item);
+            if (document.getElementById('upcoming-notifications')) {
+                // update count
+                const t = document.querySelector('#upcoming-notifications div');
+                if (t) t.textContent = `Upcoming reminders (${getUpcomingReminders(days).length})`;
+            }
+        };
+
+        const dismissBtn = document.createElement('button');
+        dismissBtn.textContent = 'Dismiss';
+        dismissBtn.onclick = function() {
+            if (item.parentNode) item.parentNode.removeChild(item);
+            if (getUpcomingReminders(days).length === 0) {
+                const p = document.getElementById('upcoming-notifications');
+                if (p && p.parentNode) p.parentNode.removeChild(p);
+            }
+        };
+
+        controls.appendChild(markBtn);
+        controls.appendChild(dismissBtn);
+        item.appendChild(controls);
+        panel.appendChild(item);
+    });
+
+    const closeAll = document.createElement('button');
+    closeAll.textContent = 'Close';
+    closeAll.style.marginTop = '10px';
+    closeAll.onclick = function() {
+        const p = document.getElementById('upcoming-notifications');
+        if (p && p.parentNode) p.parentNode.removeChild(p);
+    };
+    panel.appendChild(closeAll);
+
+    document.body.appendChild(panel);
+}
 
 function renderReminders() {
     reminderHistory.innerHTML = '';
